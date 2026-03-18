@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>工作問題匯報與簡報製作</title>
+    <style>
+        :root {
+            --primary: #4A00E0; /* 鮮艷深紫 */
+            --secondary: #f0f4f8;
+            --accent: #FF512F; /* 活力亮橘紅 */
+            --highlight: #00C9FF; /* 明亮青色 */
+            --text-dark: #2c3e50;
+            --ppt-theme: #4A00E0; 
+        }
+        body { 
+            font-family: 'Segoe UI', 'Microsoft JhengHei', sans-serif; 
+            background: linear-gradient(135deg, #f6f8fd 0%, #f1f5f9 100%); 
+            color: var(--text-dark); 
+            margin: 0; 
+            padding: 20px; 
+            line-height: 1.6; 
+        }
+        .container { 
+            max-width: 1450px; 
+            margin: 0 auto; 
+            background: white; 
+            padding: 35px; 
+            border-radius: 20px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1); 
+        }
+        
+        /* 鮮豔的標題設計 */
+        h1 { 
+            text-align: center; 
+            font-size: 36px; 
+            margin-bottom: 30px; 
+            display: inline-block; 
+            position: relative; 
+            left: 50%; 
+            transform: translateX(-50%);
+            background: linear-gradient(to right, #4A00E0, #8E2DE2, #f39c12);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            border-bottom: 4px dashed var(--highlight);
+            padding-bottom: 15px;
+        }
+        
+        /* 視圖切換 */
+        .view-section { display: none; animation: fadeIn 0.5s ease-out; }
+        .active-view { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* 教學示範區塊 (重新加回並配上鮮艷色彩) */
+        .demo-box { 
+            background: linear-gradient(135deg, #fff9eb 0%, #fff1f3 100%); 
+            border: 3px dashed #FF512F; 
+            border-radius: 16px; 
+            padding: 30px; 
+            margin-bottom: 40px; 
+            cursor: pointer; 
+            text-align: center; 
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); 
+            box-shadow: 0 8px 20px rgba(255,81,47,0.15); 
+        }
+        .demo-box:hover { 
+            transform: translateY(-5px) scale(1.02); 
+            background: linear-gradient(135deg, #fff1f3 0%, #ffe3e8 100%); 
+            box-shadow: 0 12px 25px rgba(255,81,47,0.25);
+        }
+
+        /* 行業選擇導航 */
+        .industry-gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin: 20px 0 40px 0; }
+        .industry-item { 
+            cursor: pointer; 
+            border: 2px solid #e0e6ed; 
+            border-radius: 16px; 
+            text-align: center; 
+            padding: 25px 15px; 
+            background: #fff; 
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); 
+            display: flex; flex-direction: column; justify-content: center; align-items: center; 
+        }
+        .industry-item:hover { 
+            border-color: var(--highlight); 
+            transform: translateY(-8px); 
+            box-shadow: 0 15px 30px rgba(0,201,255,0.2); 
+            background: linear-gradient(to bottom, #ffffff, #f0fbff);
+        }
+        .industry-item h3 { margin: 15px 0 0; color: var(--primary); font-size: 19px; font-weight: 700; line-height: 1.4; }
+        
+        /* 自由創作特製樣式 */
+        .special-item {
+            grid-column: 1 / -1; 
+            background: linear-gradient(135deg, #fffbf0 0%, #fff2d9 100%);
+            border: 3px dashed #f39c12;
+            padding: 30px !important;
+        }
+        .special-item:hover {
+            border-style: solid;
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(243, 156, 18, 0.3) !important;
+            border-color: #d35400;
+            background: linear-gradient(135deg, #fff2d9 0%, #ffeaa7 100%);
+        }
+        .special-item h3 { color: #d35400; font-size: 24px; }
+
+        /* 步驟與編輯區 */
+        .step-container { margin-bottom: 25px; border: 1px solid #e0e6ed; border-radius: 12px; overflow: hidden; background: #fff; text-align: left; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .step-header { background: linear-gradient(to right, var(--primary), #8E2DE2); color: white; padding: 15px 25px; font-size: 18px; font-weight: bold; letter-spacing: 1px; }
+        .tab-buttons { display: flex; background: #f8fafd; border-bottom: 1px solid #e0e6ed; }
+        .tab-btn { flex: 1; padding: 14px; border: none; background: none; font-weight: bold; color: #555; cursor: pointer; border-right: 1px solid #e0e6ed; transition: 0.2s; font-size: 15px; }
+        .tab-btn:last-child { border-right: none; }
+        .tab-btn:hover { background: #edf2f7; color: var(--primary); }
+        .tab-btn.active { background: white; color: var(--highlight); border-bottom: 3px solid var(--highlight); }
+        .tab-content { padding: 25px; background: white; min-height: 120px; font-size: 16px; line-height: 1.7; }
+        
+        /* 實作區佈局 */
+        .workspace { display: flex; gap: 30px; align-items: stretch; flex-wrap: wrap; margin-top: 20px; }
+        .editor-panel { flex: 1 1 480px; max-width: 600px; height: 75vh; overflow-y: auto; padding: 25px; border: 1px solid #e0e6ed; background: #fcfdfe; border-radius: 12px; }
+        .preview-panel { flex: 1 1 450px; display: flex; flex-direction: column; align-items: center; }
+
+        .exercise-step { margin-bottom: 30px; background: white; padding: 25px; border-radius: 12px; border-left: 6px solid var(--highlight); box-shadow: 0 5px 20px rgba(0,0,0,0.06); }
+        textarea { width: 100%; height: 130px; padding: 15px; border: 2px solid #dcdde1; border-radius: 8px; font-size: 15px; margin-top: 15px; font-family: inherit; line-height: 1.6; box-sizing: border-box; transition: all 0.3s; background: #fafbfc; }
+        textarea:focus { outline: none; border-color: var(--highlight); background: #fff; box-shadow: 0 0 0 4px rgba(0,201,255,0.15); }
+
+        /* 常用句式區塊 */
+        .phrase-box { background: linear-gradient(to right, #e0f7fa, #e8f8f5); border-left: 4px solid #1abc9c; padding: 15px; margin-top: 12px; margin-bottom: 12px; border-radius: 6px; font-size: 14px; color: #2c3e50; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 8px rgba(26,188,156,0.1); }
+        .btn-tts-small { background: linear-gradient(135deg, #1abc9c, #16a085); color: white; border: none; padding: 8px 15px; border-radius: 20px; cursor: pointer; font-size: 12px; font-weight: bold; flex-shrink: 0; transition: 0.3s; box-shadow: 0 3px 8px rgba(26,188,156,0.3); }
+        .btn-tts-small:hover { transform: translateY(-2px); box-shadow: 0 5px 12px rgba(26,188,156,0.4); }
+
+        /* 圖片上傳區 */
+        .upload-section { margin-top: 15px; background: #f4f6f7; padding: 12px 15px; border-radius: 8px; border: 1px dashed #bdc3c7; display: flex; justify-content: space-between; align-items: center; }
+        .img-upload-label { background: linear-gradient(135deg, var(--primary), #34495e); color: white; padding: 8px 18px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: bold; transition: 0.2s; box-shadow: 0 3px 6px rgba(0,0,0,0.15); }
+        .img-upload-label:hover { filter: brightness(1.1); }
+        .remove-img-btn { background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; padding: 8px 18px; border: none; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: bold; display: none; box-shadow: 0 3px 6px rgba(231,76,60,0.2); }
+
+        /* 簡報預覽核心 (16:9) */
+        .slide-container { width: 100%; aspect-ratio: 16 / 9; background: white; position: relative; padding: 5%; box-sizing: border-box; display: flex; flex-direction: column; overflow: hidden; transition: all 0.4s ease; border-radius: 12px; box-shadow: 0 15px 35px rgba(0,0,0,0.15); }
+        .slide-title { font-size: clamp(20px, 3.5vw, 32px); font-weight: bold; color: var(--ppt-theme); margin-bottom: 4%; padding-bottom: 2%; flex-shrink: 0; z-index: 2; position: relative; }
+        .slide-body-wrapper { display: flex; flex: 1; gap: 20px; overflow: hidden; z-index: 2; position: relative; }
+        .slide-content { font-size: clamp(15px, 2.2vw, 22px); line-height: 1.6; white-space: pre-wrap; flex: 1; overflow-y: auto; color: #333; }
+        .slide-uploaded-img { max-width: 45%; max-height: 100%; object-fit: contain; border-radius: 8px; box-shadow: 0 6px 12px rgba(0,0,0,0.15); display: none; flex-shrink: 0; }
+
+        /* 底部工具區 */
+        .reference-area { width: 100%; margin-top: 30px; padding: 25px; background: #fdfbf7; border: 1px solid #f39c12; border-radius: 12px; box-sizing: border-box; box-shadow: inset 0 0 20px rgba(243,156,18,0.05); }
+        .btn-group { display: flex; gap: 12px; margin-top: 15px; flex-wrap: wrap; }
+        button { padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.2s; font-size: 15px; }
+        .btn-primary { background: linear-gradient(135deg, var(--highlight), #00A8FF); color: white; box-shadow: 0 4px 12px rgba(38,208,206,0.3); }
+        .btn-primary:hover { box-shadow: 0 6px 18px rgba(38,208,206,0.4); transform: translateY(-2px); }
+        .btn-accent { background: linear-gradient(135deg, #FF512F, #DD2476); color: white; box-shadow: 0 4px 12px rgba(255,81,47,0.3); }
+        .btn-accent:hover { box-shadow: 0 6px 18px rgba(255,81,47,0.4); transform: translateY(-2px); }
+        .btn-lock { background: linear-gradient(135deg, #8E2DE2, #4A00E0); color: white; box-shadow: 0 4px 12px rgba(142,45,226,0.3);}
+        .btn-lock:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(142,45,226,0.4);}
+        .btn-ref-small { background: linear-gradient(135deg, #f1c40f, #f39c12); color: white; padding: 8px 15px; border-radius: 6px; font-size: 13px; display: inline-flex; align-items: center; gap: 5px; margin-left: auto; box-shadow: 0 3px 8px rgba(243,156,18,0.3); }
+        .btn-ref-small:hover { filter: brightness(1.1); transform: translateY(-1px); }
+
+        /* 圖片視覺藝廊 (V1-V14) */
+        .v-gallery-container { display: flex; overflow-x: auto; gap: 15px; padding: 15px 5px; scrollbar-width: thin; scrollbar-color: #f39c12 #fdf2e9; margin-top: 10px; background: transparent; border-radius: 8px;}
+        .v-gallery-container::-webkit-scrollbar { height: 8px; }
+        .v-gallery-container::-webkit-scrollbar-thumb { background: #f39c12; border-radius: 4px; }
+        .v-gallery-container img { height: 180px; width: auto; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); flex-shrink: 0; cursor: zoom-in; transition: 0.3s;}
+        .v-gallery-container img:hover { transform: scale(1.03); box-shadow: 0 8px 16px rgba(0,0,0,0.2); border-color: var(--highlight);}
+        
+        /* 模態框 (文字與圖片) */
+        .modal { display: none; position: fixed; z-index: 3000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); justify-content: center; align-items: center; backdrop-filter: blur(5px); }
+        .modal-content { background: white; padding: 40px; border-radius: 16px; width: 85%; max-width: 850px; max-height: 85vh; overflow-y: auto; position: relative; box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
+        #enlargedImg { max-width: 95%; max-height: 95vh; object-fit: contain; border-radius: 8px; box-shadow: 0 5px 25px rgba(0,0,0,0.5); animation: zoomIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes zoomIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        /* 法規條文樣式 */
+        .law-section { margin-bottom: 25px; border-bottom: 1px solid #eee; padding-bottom: 20px; }
+        .law-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .law-section h3 { color: var(--primary); margin-top: 0; margin-bottom: 12px; font-size: 18px; display: flex; align-items: center; gap: 8px; }
+        .law-section p { margin: 8px 0; font-size: 15.5px; line-height: 1.6; color: #444; }
+        .law-title { font-weight: bold; text-decoration: none; border-bottom: 1px solid var(--highlight); padding-bottom: 2px; transition: color 0.2s; color: var(--highlight); }
+        .law-title:hover { color: var(--accent) !important; border-bottom-color: var(--accent); background: rgba(38,208,206,0.1); }
+
+        /* ================= 九大時尚風格主題 (Modern Themes) ================= */
+        .theme-office { background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%); border-left: 12px solid var(--ppt-theme); }
+        .theme-office .slide-title { color: var(--ppt-theme); border-bottom: 2px solid rgba(26,41,128,0.2); }
+
+        .theme-tech { background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%); color: #ecf0f1; box-shadow: inset 0 0 0 2px rgba(0, 255, 204, 0.3), 0 15px 35px rgba(0,0,0,0.3); }
+        .theme-tech .slide-title { color: #00ffcc; border-bottom: 1px solid rgba(0,255,204,0.3); text-shadow: 0 0 10px rgba(0,255,204,0.3); }
+        .theme-tech .slide-content { color: #dcdde1; }
+
+        .theme-catering { background: linear-gradient(to right bottom, #fffcf5, #fff5e6); border-top: 10px solid #d35400; }
+        .theme-catering .slide-title { color: #8e44ad; border-bottom: 2px dashed rgba(211,84,0,0.4); text-align: center; }
+        
+        .theme-design { background: #ffffff; background-clip: padding-box; border: 4px solid transparent; }
+        .theme-design::before { content: ''; position: absolute; top: 0; right: 0; bottom: 0; left: 0; z-index: 0; margin: -4px; border-radius: inherit; background: linear-gradient(45deg, #9b59b6, #f1c40f, #ff9ff3, #00C9FF); background-size: 200% 200%; animation: gradientBG 5s ease infinite;}
+        @keyframes gradientBG { 0% {background-position: 0% 50%;} 50% {background-position: 100% 50%;} 100% {background-position: 0% 50%;} }
+        .theme-design .slide-title { color: #9b59b6; border-bottom: 2px solid #f1c40f; display: inline-block; padding-right: 20px; }
+
+        .theme-construction { background: #fdfbf7; border-left: 15px solid #f39c12; border-bottom: 8px solid #2c3e50; }
+        .theme-construction .slide-title { background: #2c3e50; color: #f1c40f; padding: 6px 20px; display: inline-block; border-radius: 4px; text-transform: uppercase; border: none; letter-spacing: 1px;}
+
+        .theme-edu { background: #fffaf0; border: 4px solid #ff9ff3; border-radius: 24px; box-shadow: 0 10px 25px rgba(255,159,243,0.15); }
+        .theme-edu .slide-title { color: #ff9ff3; border-bottom: 3px dotted #ff9ff3; text-align: center; }
+
+        .theme-minimalist { background: #ffffff; border: 1px solid #eaeaea; }
+        .theme-minimalist .slide-title { color: #222; border-bottom: 1px solid #ddd; font-weight: 300; letter-spacing: 3px; text-transform: uppercase; }
+        
+        .theme-nature { background: linear-gradient(to right bottom, #f4fbf4, #e8f5e9); border-radius: 20px 0 20px 0; border-left: 8px solid #27ae60; }
+        .theme-nature .slide-title { color: #2d6a4f; border-bottom: 2px solid rgba(39,174,96,0.3); }
+        
+        .theme-aviation { background: #ffffff; border-top: 12px solid #003366; background-image: linear-gradient(rgba(0,51,102,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,51,102,0.03) 1px, transparent 1px); background-size: 30px 30px; }
+        .theme-aviation .slide-title { color: #003366; border-bottom: 4px solid #e74c3c; display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; }
+
+        @media print { .no-print { display: none !important; } .slide-container { page-break-after: always; width: 100vw; height: 100vh; border: none !important; margin:0; box-shadow: none; border-radius: 0;} }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="no-print" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <button class="btn-primary" onclick="switchView('home-view')">🏠 返回首頁</button>
+        <div id="status-bar" style="font-weight: bold; color: var(--highlight);"></div>
+    </div>
+
+    <div id="home-view" class="view-section active-view">
+        <h1>工作問題匯報與簡報製作</h1>
+        
+        <div class="demo-box" onclick="openDemo()">
+            <h2 style="color: var(--accent); margin: 0; font-size: 28px; text-shadow: 1px 1px 2px rgba(0,0,0,0.05);">
+                <span style="font-size: 1.4em; vertical-align: middle;">📢</span> 
+                施工噪音問題匯報 (簡報匯報示範)
+                <span style="font-size: 1.4em; vertical-align: middle;">🏗️</span>
+            </h2>
+            <p style="font-size: 16px; font-weight: bold; color: #555; margin-top: 15px;">👉 點擊查看 9 步拆解結構、完整講稿與視覺排版參考</p>
+        </div>
+
+        <h2 style="text-align: center; color: var(--primary); border-top: 1px dashed #ccc; padding-top: 35px; font-size: 22px;">選擇工作範疇進行實作練習</h2>
+        <div class="industry-gallery" id="industry-list">
+            </div>
+    </div>
+
+    <div id="demo-view" class="view-section">
+        <h2 style="color: var(--primary); text-align: center; border-bottom: 2px solid var(--accent); padding-bottom: 15px;">📢 施工噪音問題匯報 (簡報匯報示範) 🏗️</h2>
+        <p style="margin-bottom: 30px; color: #555; text-align: center; font-size: 16px;">請依次查看下方步驟，點擊「組織內容」可聆聽語音示範。</p>
+        <div id="demo-steps-container"></div>
+        
+        <div style="background: linear-gradient(to right, #f4f8ff, #eef5ff); padding: 25px; border-radius: 12px; margin-top: 40px; border: 2px dashed #3498db;">
+            <h3 style="color:#2980b9; font-size: 20px; margin-top: 0; text-align: center;">🖼️ 簡報視覺排版參考 (V1 - V14) <br><span style="font-size:14px;color:#777; font-weight:normal;">(左右滑動瀏覽，點擊圖片可全螢幕放大)</span></h3>
+            <div id="demo-gallery" class="v-gallery-container"></div>
+        </div>
+    </div>
+
+    <div id="exercise-view" class="view-section">
+        <h2 id="exercise-title" style="text-align: center; color: var(--highlight); font-size: 28px;"></h2>
+        
+        <div class="workspace">
+            <div class="editor-panel no-print">
+                <div style="margin-bottom: 25px; border-bottom: 2px dashed #e0e6ed; padding-bottom: 20px; background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
+                    <label style="font-weight:bold; color:var(--primary); font-size:15px;">🎨 簡報主色：</label>
+                    <input type="color" id="theme-color" value="#2c3e50" onchange="updateUI()" style="vertical-align: middle; cursor:pointer;">
+                    <label style="margin-left: 20px; font-weight:bold; color:var(--primary); font-size:15px;">🖼️ 風格主題：</label>
+                    <select id="theme-style" onchange="updateUI()" style="padding: 8px 12px; border-radius: 6px; border: 1px solid #ccc; font-family: inherit; font-size: 14px; outline: none; cursor:pointer;">
+                        <option value="theme-office">🏢 商務專業 (辦公室/通用)</option>
+                        <option value="theme-tech">💻 科技黑客 (資訊科技)</option>
+                        <option value="theme-catering">🍽️ 典雅餐飲 (酒店餐飲)</option>
+                        <option value="theme-design">🎨 創意視覺 (設計創作)</option>
+                        <option value="theme-construction">🚧 工業重裝 (工程地盤)</option>
+                        <option value="theme-edu">🏫 親和活潑 (幼教康體)</option>
+                        <option value="theme-minimalist">🤍 留白簡約 (簡約風)</option>
+                        <option value="theme-nature">🌿 綠色自然 (自然風)</option>
+                        <option value="theme-aviation">✈️ 專業航空 (航空風)</option>
+                    </select>
+                </div>
+                
+                <div id="steps-inputs"></div>
+                
+                <div style="margin-top: 35px; display: flex; gap: 15px;">
+                    <button class="btn-primary" style="flex: 1; background: linear-gradient(135deg, #f39c12, #e67e22); box-shadow: 0 4px 10px rgba(243,156,18,0.2);" onclick="saveLocal()">💾 保留進度</button>
+                    <button class="btn-accent" style="flex: 1;" onclick="generateFinal()">✅ 生成簡報成品</button>
+                </div>
+            </div>
+
+            <div class="preview-panel">
+                <div id="ppt-preview" class="slide-container theme-office">
+                    <div id="ppt-title" class="slide-title">標題載入中</div>
+                    <div class="slide-body-wrapper">
+                        <div id="ppt-content" class="slide-content">內容載入中</div>
+                        <img id="ppt-img-preview" class="slide-uploaded-img" src="" alt="自訂圖片預覽">
+                    </div>
+                </div>
+                <div style="margin-top: 25px; font-weight: bold; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; width: 100%;">
+                    <button onclick="changeSlide(-1)" style="background: #e0e6ed; color: #333; box-shadow: none;">◀ 上一步</button>
+                    <span id="slide-index" style="margin: 0 25px; font-size: 18px; color: var(--primary); background: #fff; padding: 5px 15px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">1 / 9</span>
+                    <button onclick="changeSlide(1)" class="btn-primary">下一步 ▶</button>
+                </div>
+                
+                <div class="reference-area no-print">
+                    <h3 style="margin-top: 0; color: #d35400; font-size: 18px; display: flex; align-items: center; gap: 8px;">📚 輔助資源</h3>
+                    <div class="btn-group">
+                        <button class="btn-lock" onclick="askUnlock()">🔒 教師解鎖示範</button>
+                    </div>
+                    <div id="step-hint-box" style="margin-top: 20px; padding: 20px; background: #fff; border-radius: 8px; border: 1px dashed #f39c12; font-size: 15px; line-height: 1.6; box-shadow: 0 2px 10px rgba(243,156,18,0.05);">
+                        <strong style="color:#d35400; font-size: 16px;">💡 多角度思考引導：</strong> <span id="hint-text" style="color: #c0392b; font-weight: bold; display: block; margin-top: 8px;"></span>
+                    </div>
+                    
+                    <hr style="border: 0; border-top: 1px dashed #f39c12; margin: 25px 0;">
+                    <h3 style="color:#2980b9; font-size: 17px; margin-bottom: 10px; margin-top: 0; display: flex; align-items: center; gap: 8px;">🖼️ 示範 PPT 視覺參考 <span style="font-size:13px;color:#777; font-weight:normal;">(左右滑動瀏覽，點擊可放大)</span></h3>
+                    <div id="exercise-gallery" class="v-gallery-container"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="final-view" class="view-section">
+        <h2 style="text-align: center; color: var(--primary); font-size: 32px;">🎉 匯報簡報製作完成 🎉</h2>
+        <div style="text-align: center; margin-bottom: 30px;" class="no-print">
+            <button class="btn-primary" onclick="switchView('exercise-view')" style="margin-right: 15px;">◀ 返回修改</button>
+            <button class="btn-accent" onclick="window.print()">🖨️ 輸出 PDF 簡報 (A4橫向)</button>
+        </div>
+        <div id="final-gallery" style="display: grid; grid-template-columns: 1fr; gap: 40px; padding: 30px; background: #f8fafd; border-radius: 16px;"></div>
+    </div>
+</div>
+
+<div id="modal-box" class="modal" onclick="if(event.target===this) this.style.display='none'">
+    <div class="modal-content">
+        <span onclick="document.getElementById('modal-box').style.display='none'" style="position:absolute; right:20px; top:15px; font-size:28px; cursor:pointer; color:#999; transition:0.2s;">&times;</span>
+        <h2 id="modal-title" style="border-bottom: 3px solid var(--highlight); padding-bottom: 15px; margin-top: 0; color:var(--primary);"></h2>
+        <div id="modal-body" style="line-height: 1.7; font-size: 16px; color:#444;"></div>
+    </div>
+</div>
+
+<div id="image-modal-box" class="modal" onclick="if(event.target===this) closeImageModal()">
+    <span onclick="closeImageModal()" style="position:absolute; right:30px; top:20px; font-size:45px; cursor:pointer; color:#fff; font-weight:bold; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">&times;</span>
+    <img id="enlargedImg" src="" alt="Enlarged Image" onclick="event.stopPropagation()">
+</div>
+
+<script>
+/* -------------------------------------------------------------------------
+   語音功能 (普通話)
+   ------------------------------------------------------------------------- */
+function speakMandarin(text) {
+    if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel(); 
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'zh-CN'; // 設定為普通話
+        utterance.rate = 1; 
+        window.speechSynthesis.speak(utterance);
+    } else {
+        alert("您的瀏覽器不支持語音朗讀功能。");
+    }
+}
+
+/* -------------------------------------------------------------------------
+   基礎簡報結構 (9頁)
+   ------------------------------------------------------------------------- */
+const slideStructure = [
+    { id: 1, title: "步驟一：發現問題", slide: "發現問題及背景" },
+    { id: 2, title: "步驟二：說明詳情", slide: "事故/違規詳情" },
+    { id: 3, title: "步驟三：翻查條例", slide: "相關法律條例與指引" },
+    { id: 4, title: "步驟四：分析影響", slide: "後果及潛在影響" },
+    { id: 5, title: "步驟五：調查原因", slide: "事故原因分析" },
+    { id: 6, title: "步驟六A：提出建議 (即時)", slide: "建議 A：即時措施" },
+    { id: 7, title: "步驟六B：提出建議 (長遠一)", slide: "建議 B：流程改善" },
+    { id: 8, title: "步驟六C：提出建議 (長遠二)", slide: "建議 C：技術升級" },
+    { id: 9, title: "總結與參考資料", slide: "總結及參考資料" }
+];
+
+/* -------------------------------------------------------------------------
+   全局示範數據 (施工噪音)
+   ------------------------------------------------------------------------- */
+const demoStepsData = [
+    { title: "步驟一：發現問題", q: "你如何察覺到違規的跡象？", i: "收到市民投訴；指公司工程隊伍違反《環境影響評估條例》。" },
+    { title: "步驟二：說明詳情", q: "具體的時間、地點及數據是什麼？", i: "沙田保安道舊樓重建項目；本週一收到投訴；現場量度噪音達 83.7 分貝。" },
+    { title: "步驟三：翻查條例", q: "這違反了哪項具體法例？", i: "《環境影響評估程序的技術備忘錄》附件5；日間建築工程噪音不可高於 75 分貝。" },
+    { title: "步驟四：分析影響", q: "若不處理會有什麼後果？", i: "公司聲譽受損；可能遭到政府檢控。" },
+    { title: "步驟五：調查原因", q: "造成問題的根本原因是什麼？", i: "使用款式陳舊的破碎式挖土機；施工隊忽視影響，未採取紓減措施。" },
+    { title: "步驟六A：提出建議 (即時)", q: "有什麼即時的補救措施？", i: "加裝吸音板製成的隔音屏障；放近挖土機並屏蔽，可減 5-10 分貝。" },
+    { title: "步驟六B：提出建議 (長遠一)", q: "如何從流程上改善問題？", i: "調整施工時間；建議早上九點後才進行高噪音的破碎工程。" },
+    { title: "步驟六C：提出建議 (長遠二)", q: "有什麼長遠的技術或設備升級方案？", i: "改用油壓夾碎機；噪音低逾15分貝；可從利得稅中扣減資本開支。" },
+    { title: "步驟七：總結匯報", q: "如何簡潔有力地總結你的匯報？", i: "重申三項建議（隔音屏障、調整時間、優質設備）；表達解決問題的信心。" }
+];
+
+const demoSpeechData = [
+    "冼經理，近來我們收到市民的投訴，指公司的工程隊伍在施工時違反了《環境影響評估條例》，下面我想向您匯報一下。",
+    "涉嫌違規的工程是沙田保安道的舊樓重建項目。本週一收到市民投訴，指施工噪音過大，影響居民正常生活。收到投訴後，我馬上到現場調查，在附近屋苑內量得的噪音高達 83.7 分貝。",
+    "根據《環境影響評估程序的技術備忘錄》附件 5 的規定，日間的建築工程噪音不可高於 75 分貝，因此我們已經違反了相關條例。",
+    "公司不但聲譽受損，更可遭到檢控，問題亟需解決。",
+    "據調查，噪音超標的原因主要有兩方面。首先，我們使用的是款式陳舊的破碎式挖土機，施工時直接產生了大量噪音。其次，施工隊忽視工程項目對附近居民的影響，未採取措施紓減噪音。",
+    "為了解決目前的問題，我有以下三個建議。第一，採取即時措施，紓減噪音。建議在施工現場加裝用吸音板製成的隔音屏障。根據環保署的指引，應把隔音屏障放置在距離破碎式挖土機最近的位置，並將機器屏蔽，這樣可降低建築噪音約 5 至 10 分貝。",
+    "第二，在滋擾較少的時段進行破碎工程。根據《噪音管制條例》(第 400 章)，可以進行建築工程的時間是早上七點至下午七點。而我建議早上九點以後才進行噪音比較大的破碎工程，這樣可減少對居民的騷擾，將工程對居民的影響降到最低。",
+    "第三，從長遠來看，儘快改用環保署推薦的油壓夾碎機。這是解決噪音問題最徹底、有效的方法。根據房委會的測試，油壓夾碎機的操作噪音比傳統的破碎式挖土機低逾 15 分貝。此外，油壓夾碎機是環保署認可的優質機動設備，根據《稅務條例》，優質機動設備的資本開支可從利得稅中扣減，對公司而言，可兼顧經濟效益與環保效益。",
+    "總括而言，如果能加設隔音屏障，靈活調整施工時間以及採用優質機動設備，相信我們的問題就可迎刃而解。"
+];
+
+/* -------------------------------------------------------------------------
+   六大行業 + 自由創作 數據 (包含通用法規)
+   ------------------------------------------------------------------------- */
+const industries = {
+    "自由創作": {
+        icon: "✨", defaultTheme: "theme-minimalist",
+        lawHTML: `
+            <div class="law-section"><h3>📋 通用工作環境指引</h3>
+            <p><a href="https://www.labour.gov.hk/tc/public/os/C/office.pdf" target="_blank" class="law-title" style="color:var(--accent);">《工作環境衞生與安全指引》（勞工處）</a><br>要求所有室內工作間保持良好通風、照明、急救設施及基本清潔衞生。</p></div>
+        `,
+        questions: [
+            "你如何察覺到工作環境中的潛在違規或管理問題？(例如：員工集體投訴、離職率異常、環境衞生惡劣等)",
+            "事件的具體背景、牽涉的人員部門及影響範圍為何？",
+            "這可能觸犯了哪些通用勞工法例或指引？(💡 提示：是否違反了《工作環境衞生與安全指引》？)",
+            "若不妥善處理，對員工士氣、公司聲譽及法律責任有何深遠影響？",
+            "造成問題的核心原因是什麼？(是制度缺失、跨部門溝通不良，還是主管法律/衞生意識不足？)",
+            "有什麼即時的應急與止損措施？(例如：立刻處理投訴、即時進行環境大清潔？)",
+            "日常行政與人事流程該如何重新規範？(例如：重新檢視衞生與安全守則、設立清晰的匿名申訴機制？)",
+            "有什麼長遠的系統化或教育培訓方案能從根本解決問題？(例如：引入自動化監管系統、全體主管法規與衞生培訓？)",
+            "請精要總結你的改善方案，並帶出建立健康、公平且安全衞生職場環境的核心價值。"
+        ],
+        phrases: [
+            "近來我們在內部檢討時發現了一個潛在的管理與環境風險，我想向您匯報一下。",
+            "涉及問題的是我們近期的工作環境安排。我們在處理相關記錄時發現...",
+            "根據勞工處的相關指引，僱主有絕對的法律責任確保工作環境的衞生與安全。",
+            "若未及時糾正，公司不但會面臨勞工處的介入調查，更會嚴重打擊團隊士氣。",
+            "引發這次危機的原因主要有兩方面。首先是前線管理層合規意識薄弱，其次是公司缺乏明確的操作指引。",
+            "第一，採取即時措施。建議馬上進行環境改善與支援，以保障受影響員工的權益，防止事態惡化。",
+            "第二，完善內部審批與溝通流程。我建議立即嚴格執行相關安全與衞生指引，並由專責部門定期抽查。",
+            "第三，從長遠來看，儘快為公司引入系統化的管理與法規培訓，從根本消除人為疏忽與違規動機。",
+            "總括而言，如果能及時糾正錯誤、嚴格執行內部指引以及引入長遠防範機制，相信問題就可迎刃而解。"
+        ],
+        demo: `問題匯報示例－工作環境衞生與安全違規問題匯報 
+總經理，近來我們在內部檢討時發現了一個潛在的管理與合規風險，指公司部分辦公區域在日常運作時可能違反了勞工處的《工作環境衞生與安全指引》，下面我想向您匯報一下。
+
+涉及違規的是近期新擴建的地下儲物及後勤辦公室。本週一，行政部在進行環境安全巡查時，發現該區域的通風系統長期故障未修，且缺乏足夠的照明與急救設備。收到通報後，我馬上進行調查，確認相關部門確實沒有按法定要求維持良好的工作環境。根據勞工處《工作環境衞生與安全指引》的規定，僱主有絕對的法律責任確保室內工作間保持良好通風、照明及基本清潔衞生。若未及時糾正，公司不但會面臨勞工處的介入調查與警告，更會嚴重影響在該處工作的同事的健康，打擊團隊士氣，問題亟需解決。
+
+據調查，引發這次危機的原因主要有兩方面。首先，負責該區域的前線管理層合規及衞生意識薄弱，為了節省維修預算而拖延處理。其次，公司缺乏明確的環境安全定期抽查與上報機制。為了解決目前的問題，我有以下三個建議。
+
+第一，採取即時措施。建議馬上安排專業維修團隊搶修通風系統，並即時加裝臨時照明與合格的急救箱，以保障受影響員工的權益與安全，防止事態惡化或引發工傷。
+
+第二，完善內部審批與溝通流程。我建議立即嚴格執行「每月工作環境衞生及安全巡查表」，並由專責的行政及人事部門定期聯合抽查，確保所有工作區域均符合勞工處指引，一旦發現問題須於48小時內立案跟進。
+
+第三，從長遠來看，儘快為公司引入系統化的環境監測設備與自動報修系統。這是從根本消除人為疏忽與違規動機的有效方法。智能感測器能實時監控室內空氣流通與溫濕度，一旦數據異常會自動發出維修工單。此外，我們也應為全體主管舉辦工作環境安全與衞生法規培訓。
+
+總括而言，如果能及時糾正環境缺失、嚴格執行內部巡查指引以及引入長遠的智能防範機制，相信我們的問題就可迎刃而解，並建立一個健康、公平且安全的職場環境。`
+    },
+    "工程建築": { 
+        icon: "🏗️", defaultTheme: "theme-construction",
+        lawHTML: `
+            <div class="law-section"><h3>1. 職業安全與環境衞生（建築業最核心）</h3>
+            <p><a href="https://www.elegislation.gov.hk/hk/cap59" target="_blank" class="law-title">《工廠及工業經營條例》（第 59 章）及其附屬規例：</a><br>常見違規：未有為高空工作提供安全的棚架或防墮裝置；未妥善保養起重機械導致倒塌；在密閉空間工作未執行風險評估。</p>
+            <p><a href="https://www.elegislation.gov.hk/hk/cap509" target="_blank" class="law-title">《職業安全及健康條例》（第 509 章）：</a><br>常見違規：承建商未能提供及維持安全的工作系統，導致地盤雜物堆積引發絆倒或火災風險。</p>
+            <p><a href="https://www.elegislation.gov.hk/hk/cap132" target="_blank" class="law-title">《公眾衞生及市政條例》（第 132 章）- 預防蚊蟲及衞生：</a><br>常見違規：地盤積水未有清理導致蚊蟲（如白紋伊蚊）滋生，或地盤廁所及環境衞生惡劣。</p></div>
+            <div class="law-section"><h3>2. 建築標準與工程質量</h3>
+            <p><a href="https://www.elegislation.gov.hk/hk/cap123" target="_blank" class="law-title">《建築物條例》（第 123 章）：</a><br>常見違規：未經批准進行建築工程（僭建物）；未按已批准圖則施工；使用不合規格材料（短樁或偷工減料）。</p></div>
+            <div class="law-section"><h3>3. 環境保護與公共滋擾</h3>
+            <p><a href="https://www.elegislation.gov.hk/hk/cap400" target="_blank" class="law-title">《噪音管制條例》（第 400 章）：</a> 未持有有效許可證在限制時間內施工。<br>
+            <a href="https://www.elegislation.gov.hk/hk/cap354" target="_blank" class="law-title">《廢物處置條例》（第 354 章）：</a> 非法傾倒建築廢料（泥頭）。<br>
+            <a href="https://www.elegislation.gov.hk/hk/cap311" target="_blank" class="law-title">《空氣污染管制條例》（第 311 章）：</a> 拆卸工程未有灑水導致塵土飛揚。</p></div>
+            <div class="law-section"><h3>4. 商業操守與反貪腐</h3>
+            <p><a href="https://www.elegislation.gov.hk/hk/cap201" target="_blank" class="law-title">《防止賄賂條例》（第 201 章）：</a><br>常見違規：工程投標時出現「圍標」；收受非法回佣以換取驗收通過。</p></div>
+            <div class="law-section"><h3>📋 業內實務守則與指引 (Codes of Practice)</h3>
+            <p><a href="https://www.labour.gov.hk/tc/public/content2_8b.htm" target="_blank" class="law-title" style="color:var(--accent);">《竹棚架工作安全守則》/《起重機守則》（勞工處）</a><br>規定搭建棚架的受力標準、防墮網設置及吊運訊號標準。</p>
+            <p><a href="https://www.bd.gov.hk/tc/resources/codes-and-references/" target="_blank" class="law-title" style="color:var(--accent);">《地盤監督作業守則》（屋宇署）</a><br>規範工程師在地盤進行質量巡查及物料抽檢(TCP)程序。</p></div>
+        `, 
+        questions: [
+            "你如何察覺到地盤潛在的多重違規跡象？(是巡查時發現高空工作無安全帶、地盤積水生蚊，還是驗收時發現使用了次等材料？)",
+            "具體發生的時間、地點及受影響範圍為何？(涉及多少前線工人？周邊居民受噪音/積水影響的程度？工程進度延誤情況？)",
+            "這可能同時觸犯了哪些法例或實務守則？(💡 提示：請綜合思考《工廠及工業經營條例》的工安、《公眾衞生及市政條例》的防蚊清潔，或《防止賄賂條例》的廉潔規定)",
+            "若不及時處理，對工程進度、工人生命安全、公眾環境及公司牌照會造成什麼連鎖後果？",
+            "造成這些違規的深層原因是什麼？(是前線貪快趕工、管理層忽視巡查與清潔，還是招標採購過程存在利益衝突？)",
+            "應採取什麼即時的緊急補救措施？(例如：立刻下令停工、即時清理積水與廢料，或暫停涉事員工職務？)",
+            "如何從流程與管理制度上堵塞漏洞？(例如：引入每日開工前安全設備與衞生核查表、實施嚴格的物料雙重驗收機制？)",
+            "有什麼長遠的科技或設備升級方案能根治問題？(例如：引入物聯網(IoT)智能安全帶監測系統、全面改用低噪環保施工設備？)",
+            "請簡練地總結你的短中長期建議，並重申嚴格遵守法規及行業清潔指引對建築業的必要性。"
+        ],
+        phrases: [
+            "近來我們在內部巡查時發現了一個潛在的職安健與環境風險，我想向您匯報一下。",
+            "涉及違規的是即將完工的...工程。安全主任在進行現場巡查時發現...",
+            "根據《工廠及工業經營條例》及相關守則，東主必須為僱員提供及維持安全的工作系統及環境。",
+            "若未及時糾正而讓存有隱患的項目繼續施工，公司不但會面臨勞工處的檢控，更會嚴重威脅工人的生命安全。",
+            "據調查，引發這次危機的原因主要有兩方面。首先是前線管工合規意識薄弱，其次是團隊忽視了日常巡查與清潔監督。",
+            "第一，採取即時措施，暫停違規操作。建議在整改限期前，馬上安排團隊立刻...",
+            "第二，完善內部巡查與記錄流程。我建議立即嚴格執行安全及衞生核查表，並由主管每日簽字核實。",
+            "第三，從長遠來看，儘快為公司統一採購配備物聯網的智能安全與環境監測系統，從根本彌補人為巡查的漏洞。",
+            "總括而言，如果能及時補足防護裝備、嚴格執行記錄流程以及引入智能監控設備，相信問題就可迎刃而解。"
+        ],
+        demo: `問題匯報示例－地盤職安健違規問題匯報
+林主任，近來我們在內部巡查時發現了一個潛在風險，指公司的工程隊伍在施工時可能違反了《工廠及工業經營條例》（第 59 章），下面我想向您匯報一下。
+
+涉及違規的是即將完工的「海濱商場」中庭玻璃幕牆工程。本週一，安全主任在進行現場的最終巡查時，發現外牆棚架上有數名工人正在進行高空工作，但完全沒有配戴安全帶，現場亦沒有設置防墮網。收到內部通報後，我馬上進行調查，確認工程分判商確實沒有為工人嚴格執行安全防護裝備的規定。根據《工廠及工業經營條例》的規定，東主必須為僱員提供及維持安全的工作系統及設備。若未及時糾正而讓存有安全隱患的項目繼續施工，公司不但會面臨勞工處的檢控與停工令，更會嚴重威脅工人的生命安全，問題亟需解決。
+
+據調查，引發這次職安健危機的原因主要有兩方面。首先，負責該項目的前線管工安全意識薄弱，為了趕進度而默許工人不佩戴安全裝備進行危險操作。其次，項目團隊忽視了高空工作的日常巡查，未有在施工初期及時落實安全設備的監控制度。為了解決目前的問題，我有以下三個建議。
+
+第一，採取即時措施，暫停違規操作。建議在今天的整改限期前，馬上安排工程團隊立刻為該外牆棚架加裝合格的防墮網，並強制要求所有高空工作人員配戴全身式安全帶及獨立救生繩。這樣可確保所有施工環節皆具備合法安全標準，將高空墮下的風險在復工前徹底消除。
+
+第二，完善內部巡查與記錄流程。我建議立即嚴格執行「高空工作安全設備紀錄表」。由即日起，所有工程項目在每日開工前，管工必須確實記錄所有安全帶、防墮網的檢查狀況及提供照片證明，並由項目經理或安全主任簽字核實。我們評估過這個做法的可行性，團隊在開工前只需多花幾分鐘填寫與核對，就能有效把關，將未來的違規風險降到最低。
+
+第三，從長遠來看，儘快為公司統一採購配備物聯網（IoT）感測器的智能安全帶系統。這是解決高空工作安全問題最徹底、有效的方法。針對前線管工為了趕進度而默許工人違規的情況，智能安全帶能透過內建感測器，實時偵測工人是否有正確扣上安全扣及連接獨立救生繩。一旦工人在未扣妥安全帶的情況下進行高空作業，裝備不僅會立即發出警鳴提醒工人，系統更會自動越級發送違規通知至管理層及安全主任的手機應用程式。這種透明且即時的中央監控機制，能有效阻嚇工人貪圖方便的行為，並徹底杜絕管工隱瞞或包庇違規的可能，從根本彌補人為巡查的漏洞。此外，我們也應邀請註冊安全審核員為全體工程團隊舉辦職安健法規培訓，提升員工的合規意識。
+
+總括而言，如果能及時補足防護裝備，嚴格執行安全記錄流程以及引入智能監控設備，相信我們的問題就可迎刃而解，並保障公司未來的營運安全。` 
+    },
+    "幼教與康體": { 
+        icon: "🏫", defaultTheme: "theme-edu",
+        lawHTML: `
+            <div class="law-section"><h3>⚖️ 法定條例 (Ordinance)</h3>
+            <p><a href="https://www.elegislation.gov.hk/hk/cap279" target="_blank" class="law-title">《教育條例》（第 279 章）：</a>聘用未獲註冊為「准許/註冊教員」的人士任教。</p>
+            <p><a href="https://www.elegislation.gov.hk/hk/cap132" target="_blank" class="law-title">《公眾衞生及市政條例》（第 132 章）：</a>幼稚園或中心提供的兒童茶點及膳食不潔，導致食物中毒，或校園環境衞生惡劣。</p>
+            <p><a href="https://www.elegislation.gov.hk/hk/cap362" target="_blank" class="law-title">《商品說明條例》（第 362 章）：</a>誇大導師資歷或採用威嚇性營銷強迫買課。</p></div>
+            <div class="law-section"><h3>📋 業內實務守則與指引 (Codes of Practice)</h3>
+            <p><a href="https://www.chp.gov.hk/files/pdf/guidelines_on_prevention_of_communicable_diseases_in_schools_kindergartens_kindergartens_cum_child_care_centres_child_care_centres_chi.pdf" target="_blank" class="law-title" style="color:var(--accent);">《預防傳染病指引》（衞生署）</a><br>嚴格規定校園及遊樂設施的日常清潔消毒比例（如 1:99 漂白水）、玩具定期清洗及嘔吐物的標準處理流程。</p>
+            <p><a href="https://www.edb.gov.hk/tc/edu-system/preprimary-kindergarten/comprehensive-details/admin-manual.html" target="_blank" class="law-title" style="color:var(--accent);">《幼稚園行政手冊》（教育局）</a><br>列明師生比例及校園設施安全標準。</p>
+            <p><a href="https://www.consumer.org.hk/" target="_blank" class="law-title" style="color:var(--accent);">《健身中心行業實務守則》</a><br>打擊不良營銷，規範不可使用疲勞轟炸迫使客人簽下巨額合約並需設冷靜期。</p></div>
+        `, 
+        questions: [
+            "你如何察覺到學校或機構隱藏的危機？(是發現教員未經註冊帶班、茶點食物不潔，還是玩具與設施缺乏定期清洗消毒？)",
+            "具體的涉事人員、發生的時間地點，以及受影響的學童/學員狀況為何？",
+            "這些行為抵觸了哪些法例或實務指引？(💡 提示：除了《教育條例》，是否也違反了《預防傳染病指引》的清潔規範或《公眾衞生及市政條例》？)",
+            "事件發酵後，對學童身心健康、傳染病爆發風險及機構辦學/營業牌照會帶來多大的災難性影響？",
+            "導致問題的根本管理漏洞在哪？(是人事部核查機制失效、前線教員缺乏衞生清潔意識，還是餐飲供應商把關不嚴？)",
+            "有什麼即時的危機處理與隔離措施？(例如：即時暫停涉事教員職務、全面停課進行 1:99 漂白水大清洗、銷毀有問題茶點？)",
+            "如何從行政與指引上徹底改善？(例如：嚴格執行玩具清洗紀錄表、制定傳染病爆發隔離標準？)",
+            "引入什麼智能系統或常態培訓可防患未然？(例如：智能人事註冊聯動系統、全體教職員的公共衞生與清潔法規培訓？)",
+            "請綜合你的建議作結，強調提供專業安全且衞生清潔的環境對幼兒教育的首要責任。"
+        ],
+        phrases: [
+            "近來我們在內部巡查時發現了一個潛在風險，指校方的教學團隊在行政或衞生管理上可能違反法規，我想向您匯報一下。",
+            "涉及違規的是本學期的...安排。行政主任在進行每週例行巡查時發現...",
+            "根據《教育條例》及衞生署的相關指引，校方有責任確保教員具備合法資格，並維持校園環境的高度衞生。",
+            "若未及時糾正，學校不但會面臨教育局的警告，更可能引發傳染病爆發，嚴重損害家長對本校的信任。",
+            "據調查，引發這次危機的原因主要有兩方面。首先是職員法規意識薄弱，其次是管理團隊忽視了日常的核查程序。",
+            "第一，採取即時措施，調整工作安排。建議在開課前，馬上安排...並由合資格人員接手處理。",
+            "第二，完善內部巡查與記錄流程。我建議立即嚴格執行相關的資格或清潔紀錄表，並由校長簽字核實。",
+            "第三，從長遠來看，儘快為學校引入自動化管理系統與專業培訓，從源頭消除排班或清潔上的疏漏。",
+            "總括而言，如果能及時調整安排、嚴格執行記錄流程以及引入智能監控系統，相信問題就可迎刃而解。"
+        ],
+        demo: `問題匯報示例－教員註冊違規問題匯報 
+陳校監，近來我們在內部巡查時發現了一個潛在風險，指校方的教學團隊在人事登記上可能違反了《教育條例》（第 279 章），下面我想向您匯報一下。
+
+涉及違規的是本學期新入職的兩名幼兒班助理老師。本週一，行政主任在進行每週的人事檔案巡查時，發現這兩名員工雖然已遞交申請，但尚未正式獲教育局批核為「准許教員」，卻已經在班房內獨立帶班進行教學活動。收到內部通報後，我馬上進行調查，確認校方在安排課表時，確實忽略了核實其註冊證明的生效日期。根據《教育條例》的規定，任何人在學校任教而並非註冊教員或准許教員，即屬違法；校監及校長亦須承擔法律責任。若未及時糾正而讓無牌教員繼續教學活動，學校不但會面臨教育局的警告或檢控，更會嚴重損害家長對本校專業性的信任，問題亟需解決。
+
+據調查，引發這次註冊危機的原因主要有兩方面。首先，負責招聘的人事職員法律意識薄弱，誤以為只要遞交了申請表格即可視作「具備資格」開始帶班。其次，教學管理團隊忽視了入職前的執業資格巡查，未有在編排課表前及時落實教員註冊證明的核查程序。為了解決目前的問題，我有以下三個建議。
+
+第一，採取即時措施，調整工作安排。建議在明早的開課限期前，馬上安排該兩名員工暫時脫離教學前線，轉為處理不涉及教學的行政支援工作，其班務則由具備資格的註冊教員暫代。這樣可確保所有班房教學活動皆具備合法教員資格，將合規風險在復課前徹底消除。
+
+第二，完善內部巡查與入職記錄流程。我建議立即嚴格執行「教員執業資格紀錄表」。由即日起，所有新入職教員在進入班房前，人事部必須確實記錄其註冊編號及上載證書副本，並由校長簽字核實。我們評估過這個做法的可行性，人事部門在入職審核時只需多花幾分鐘核對，就能有效把關，將未來的違規風險降到最低。
+
+第三，從長遠來看，儘快為學校引入智能人事管理與門禁聯動系統。這是解決教員資格問題最徹底、有效的方法。針對員工為了趕進度及方便排班而違規的情況，智能系統能自動比對教育局的註冊資料庫與校內課表。一旦偵測到未具備合法資格的人員被編入教學時段，系統會立即發出警鳴提醒，並自動發送異常通知給校監及校長。這種自動化的監控機制，能從源頭消除排班人員「圖方便」的動機。同時，系統會自動在證照到期前三個月發出續期提醒，防止因疏忽導致的過期執業。此外，我們也應邀請教育局代表或法律顧問為全體行政團隊舉辦教育法規培訓，提升員工的合規意識。
+
+總括而言，如果能及時調整違規工作安排，嚴格執行資格記錄流程以及引入智能人事監控系統，相信我們的問題就可迎刃而解，並保障學校未來的營運安全。` 
+    },
+    "酒店餐飲": { 
+        icon: "🍽️", defaultTheme: "theme-catering",
+        lawHTML: `
+            <div class="law-section"><h3>1. 食品安全與環境衞生清潔</h3>
+            <p><a href="https://www.elegislation.gov.hk/hk/cap132" target="_blank" class="law-title">《公眾衞生及市政條例》（第 132 章）及其附屬規例：</a><br>常見違規：廚房衞生條件惡劣（缺乏深層清潔引致蟲鼠蹤跡）；食材儲存溫度不當；出售不宜食用食物。未妥善清理廚餘或隔油池積聚污物。</p></div>
+            <div class="law-section"><h3>2. 菜單描述與銷售手法</h3>
+            <p><a href="https://www.elegislation.gov.hk/hk/cap362" target="_blank" class="law-title">《商品說明條例》（第 362 章）：</a><br>常見違規：菜單食材名稱或產地與實際不符（如普通牛肉標示為日本A5和牛）。誇大功效或收取隱藏附加費。</p></div>
+            <div class="law-section"><h3>3. 職業安全與健康</h3>
+            <p><a href="https://www.elegislation.gov.hk/hk/cap509" target="_blank" class="law-title">《職業安全及健康條例》（第 509 章）：</a><br>常見違規：廚房地面濕滑未清理及未提供防滑墊；搬運重物姿勢不當；爐具缺乏清潔與保養導致燙傷或火警。</p></div>
+            <div class="law-section"><h3>4. 酒精飲品管制</h3>
+            <p><a href="https://www.elegislation.gov.hk/hk/cap109B" target="_blank" class="law-title">《應課稅品（酒類）規例》（第 109B 章）：</a><br>違法向未滿 18 歲未成年人士售酒；未在顯眼處展示法例規定的訂明告示。</p></div>
+            <div class="law-section"><h3>📋 業內實務守則與指引</h3>
+            <p><a href="https://www.fehd.gov.hk/tc_chi/publications/code/code_index.html" target="_blank" class="law-title" style="color:var(--accent);">《食物衞生守則》（食環署）</a><br>嚴格規定危險溫度範圍（4℃至60℃）、生熟食物防交叉污染標準、砧板刀具清潔及員工洗手衞生程序。</p></div>
+        `, 
+        questions: [
+            "你是如何發現酒店或餐廳的營運風險的？(是衞生督導員發現食材解凍超時、廚房油污未清導致蟲鼠，還是顧客投訴「掛羊頭賣狗肉」？)",
+            "涉事的具體宴會項目、違規食材或需要清潔的危險工作區域的實際情況是什麼？",
+            "這可能同時違反了哪些嚴格的營運法例或清潔守則？(💡 提示：除了《公眾衞生及市政條例》，廚房操作是否也違反了食環署的《食物衞生守則》中關於交叉污染與消毒的要求？)",
+            "若隱患爆發，對食客健康、員工安全、酒店星級品牌及食環署牌照存續有何毀滅性打擊？",
+            "導致這些危機的核心原因是什麼？(是廚房為趕出菜忽視溫度與清潔監控、菜單設計部門審核不嚴，還是前線欠缺核實年齡意識？)",
+            "需要立即執行的止損行動是什麼？(例如：全面銷毀受污染食材、進行廚房深夜大清洗滅蟲、緊急鋪設防滑墊？)",
+            "日常營運流程該如何重新規範？(例如：嚴格落實高危食材溫度及廚房清潔更表、加強樓面銷售話術與核對身份證指引？)",
+            "有什麼長遠的硬體升級或智能化方案？(例如：採購具自動警報的大型快速解凍雪櫃、引入專業滅蟲及深層清潔外判服務？)",
+            "請精要總結你的改善方案，並重申誠實營運與環境衞生清潔是餐飲業的命脈。"
+        ],
+        phrases: [
+            "近來我們在內部巡查時發現了一個潛在風險，指餐飲團隊在處理食材或營運時可能違反法規，我想向您匯報一下。",
+            "涉及違規的是即將推出的首批預製食材。衞生督導員在進行廚房巡查時發現...",
+            "根據《公眾衞生及市政條例》及食環署守則的規定，出售不宜供人食用的食物或保持廚房衞生惡劣即屬違法。",
+            "若未及時攔截而讓受污染的產品推出供應，公司不但會面臨食環署檢控與封閉令，更會嚴重損害我們與食客的信任關係。",
+            "引發這次危機的原因主要有兩方面。首先是初級員工衞生及合規意識薄弱，其次是管理團隊忽視了日常的監控與清潔核查。",
+            "第一，採取即時措施，進行銷毀與大清洗。建議在試菜限期前，馬上安排團隊徹底銷毀受影響食品並全面消毒。",
+            "第二，完善內部巡查與記錄流程。我建議立即嚴格執行食材解凍及廚房清潔紀錄表，並由主廚簽字核實。",
+            "第三，從長遠來看，儘快為公司統一採購具備自動溫度警報系統的大型商用快速解凍設備及專業滅蟲服務。",
+            "總括而言，如果能及時銷毀問題食材、嚴格執行衞生記錄流程以及引入智能化設備，相信問題就可迎刃而解。"
+        ],
+        demo: `問題匯報示例－餐飲食物衞生違規問題匯報
+李經理，近來我們在內部巡查時發現了一個潛在風險，指公司的中式餐飲團隊在處理食材時可能違反了《公眾衞生及市政條例》（第 132 章），下面我想向您匯報一下。
+
+涉及違規的是即將推出的「春茗海鮮宴」首批預製食材。本週一，酒店衞生督導員在進行廚房最終巡查時，發現多款海鮮食材在室溫下解凍超過四小時。收到內部通報後，我馬上進行調查，確認廚房團隊确实沒有遵守安全的食物存放溫度標準。根據《公眾衞生及市政條例》的規定，出售或管有不宜供人食用的食物即屬違法。若未及時攔截而讓這批受污染的餐飲產品推出供應，公司不但會面臨食環署的檢控與封閉令，更會嚴重損害我們與食客的信任關係，問題亟需解決。
+
+據調查，引發這次食安危機的原因主要有兩方面。首先，負責該項目的初級廚師衞生保護意識薄弱，為了趕進度而直接將急凍海鮮放置於室溫解凍。其次，廚房管理團隊忽視了日常的食材溫度核查，未有在備料初期及時落實食材溫度監控程序。為了解決目前的問題，我有以下三個建議。
+
+第一，採取即時措施，銷毀違規食材。建議在今晚的試菜宴限期前，馬上安排廚房團隊立刻將所有受影響的海鮮及預製食品徹底銷毀，並緊急聯繫供應商調動符合安全標準的新鮮食材補上。這樣可確保所有出品皆具備合法衞生標準，將食物中毒風險在菜式推出供應前徹底消除。
+
+第二，完善內部巡查與記錄流程。我建議立即嚴格執行「食材解凍及溫度監控紀錄表」。由即日起，所有餐飲項目在開始烹飪前，廚師必須確實記錄所有高危食材的解凍時間及儲存溫度，並由部門主管或主廚簽字核實。我們評估過這個做法的可行性，團隊在備料時只需多花幾分鐘填寫及核對，就能有效把關，將未來的違規風險降到最低。
+
+第三，從長遠來看，儘快為公司統一採購具備自動溫度警報系統的大型商用快速解凍雪櫃。這是解決食安問題最徹底、有效的方法。針對員工為了趕進度而違規的情況，快速解凍雪櫃能利用精準的氣流與溫濕度控制，將原本需要一整晚的冷藏解凍時間大幅縮短。這樣一來，即使廚師在急需用料的情況下，也能在符合安全溫度的環境中快速完成解凍，從源頭消除他們「為了貪快而放置室溫」的動機。同時，設備內建的自動警報系統會實時監控內部溫度，一旦有人為設定錯誤、櫃門未關妥，或溫度意外超過攝氏 4 度的安全警戒線，系統會立即現場鳴響，並自動發送異常通知給部門主管。這種透明且即時的監控機制，能有效阻嚇並防止任何人為的溫度違規操作。此外，我們也應邀請食環署認可的衞生顧問為全體餐飲團隊舉辦食品安全法規培訓，提升員工的合規意識。
+
+總括而言，如果能及時銷毀問題食材，嚴格執行衞生記錄流程以及引入快速解凍設備，相信我們的問題就可迎刃而解，並保障酒店未來的營運安全。` 
+    },
+    "設計創作": { 
+        icon: "🎨", defaultTheme: "theme-design",
+        lawHTML: `
+            <div class="law-section"><h3>1. 知識產權相關法例</h3>
+            <p><a href="https://www.elegislation.gov.hk/hk/cap528" target="_blank" class="law-title">《版權條例》（第 528 章）：</a>未經授權使用他人的圖片、字體、音樂或插圖。Freelancer 與客戶間無明確合約產生的版權糾紛。</p>
+            <p><a href="https://www.elegislation.gov.hk/hk/cap559" target="_blank" class="law-title">《商標條例》（第 559 章）：</a>設計出與已註冊商標極度相似的圖案導致混淆。</p></div>
+            <div class="law-section"><h3>2. 廣告宣傳及消費者權益</h3>
+            <p><a href="https://www.elegislation.gov.hk/hk/cap362" target="_blank" class="law-title">《商品說明條例》（第 362 章）：</a>誇大產品實際功效、過度修圖導致誤導。</p></div>
+            <div class="law-section"><h3>3. 職業安全、健康與工作間清潔</h3>
+            <p><a href="https://www.elegislation.gov.hk/hk/cap509" target="_blank" class="law-title">《職業安全及健康條例》（第 509 章）及工作間清潔：</a><br>舞台搭建未提供防墮裝置；工作室或拍攝現場未有保持環境清潔，通風不良或未妥善清理易燃的設計物料（如油漆、天拿水、化學廢料）。</p></div>
+            <div class="law-section"><h3>4. 個人隱私</h3>
+            <p><a href="https://www.elegislation.gov.hk/hk/cap486" target="_blank" class="law-title">《個人資料（私隱）條例》（第 486 章）：</a>未經模特兒同意將照片用於宣傳。</p></div>
+            <div class="law-section"><h3>📋 業內實務守則與指引</h3>
+            <p><a href="https://www.hkda.hk/" target="_blank" class="law-title" style="color:var(--accent);">《香港設計師協會專業操守守則》（HKDA）</a><br>規定不可將修改設計賣給競爭對手（利益衝突），離職不可擅自帶走原稿 Source files。</p></div>
+        `, 
+        questions: [
+            "你是如何察覺到設計專案中的違規地雷的？(是定稿前發現使用了未授權字體、廣告圖像過度修圖失實，還是拍攝現場缺乏清潔及防墮工安措施？)",
+            "具體的涉事專案、有問題的宣傳素材（圖/文/影音）或雜亂危險的施工環境詳情為何？",
+            "這些失誤牽涉了哪些法例或業界操守？(💡 提示：除了《版權條例》，是否違反了《職安健條例》中的工作間清潔與化學物處理，或 HKDA 的設計師專業操守？)",
+            "萬一作品不慎發佈或發生意外，對客戶關係、公司品牌聲譽、版權鉅額索償會有何嚴重後果？",
+            "問題的核心癥結在哪裡？(是設計師貪圖方便上網亂抓素材、版權意識薄弱，還是拍攝主管忽視現場清潔與風險評估？)",
+            "有什麼即時的搶救方案？(例如：連夜替換成原創素材、立刻叫停危險搭景並清理化學廢料、全面攔截已排程的發佈？)",
+            "如何在管理與審批流程上建立防火牆？(例如：強制填寫「設計素材授權清單」、實施主管與法務雙重簽核機制、建立工作室清潔守則？)",
+            "長遠的技術或資源採購升級方案是什麼？(例如：為全公司採購企業版正版雲端圖庫及字體管理系統、定期舉辦 IP 法規培訓？)",
+            "請總結各項改善建議，並帶出尊重知識產權與保持專業工作環境對創意產業的核心價值。"
+        ],
+        phrases: [
+            "大家好，近來我們在內部巡查時發現了一個潛在風險，指設計團隊在製作專案時可能違反版權法或相關指引，我想向您匯報一下。",
+            "涉及違規的是即將發佈的宣傳海報。資深美術指導在定稿前的最終巡查時發現...",
+            "根據《版權條例》及相關操守規定，未經授權使用他人的素材或未保持工作間安全即屬違法。",
+            "若未及時攔截而讓這份涉及侵權的設計不慎發佈，公司不但會面臨版權持有人的索償，更會嚴重損害大客戶合約關係。",
+            "引發這次危機的原因主要有兩方面。首先是初級設計師合規意識薄弱，其次是項目團隊忽視了素材授權與環境的日常核查。",
+            "第一，採取即時措施，替換違規素材與清理現場。建議在發佈限期前，馬上連夜將素材替換為完全原創的作品。",
+            "第二，完善內部審批與授權管理流程。我建議立即嚴格執行設計素材授權清單制度，並由主管簽字核實。",
+            "第三，從長遠來看，儘快為公司統一採購具備企業版商業授權的大型正版圖庫及雲端字體管理系統。",
+            "總括而言，如果能及時替換侵權素材、嚴格執行授權記錄流程以及引入雲端管理系統，相信問題就可迎刃而解。"
+        ],
+        demo: `問題匯報示例－版權侵權問題匯報
+大家好，陳總監，近來我們在內部巡查時發現了一個潛在風險，指公司的設計團隊在製作廣告時可能違反了《版權條例》（第 528 章），下面我想向您匯報一下。
+
+涉及違規的是即將向公眾發佈的「星光百貨」夏季宣傳海報。本週一，資深美術指導在進行定稿前的最終巡查時，發現海報設計原稿中使用的一款特殊英文字體及兩張背景插圖，僅具備個人非商業用途授權。收到內部通報後，我馬上進行調查，確認設計團隊確實沒有購買這幾項素材的商業授權證明。根據《版權條例》的規定，未經版權擁有人特許而在營商過程中使用版權作品即屬違法。若未及時攔截而讓這份涉及侵權的設計不慎發佈，公司不但會面臨版權持有人的索償，更會嚴重損害我們與大客戶的合約關係及品牌聲譽，問題亟需解決。
+
+據調查，引發這次版權危機的原因主要有兩方面。首先，負責該項目的初級設計師版權意識薄弱，為了趕進度而直接從網上下載並使用了標示為「免費」但實則禁止商用的素材。其次，項目團隊忽視了素材授權證明的日常核查，未有在設計初期及時釐清所有素材的授權範圍。為了解決目前的問題，我有以下三個建議。
+
+第一，採取即時措施，替換違規素材。建議在發佈限期前，馬上安排設計團隊連夜將海報中的字體和插圖，替換為公司已購買授權或完全原創的素材，並重新輸出印刷檔及更新社交媒體發佈排程。這樣可確保所有對外發佈的內容皆具備合法商業授權，將侵權風險在不慎發佈前徹底消除。
+
+第二，完善內部審批與授權管理流程。我建議立即嚴格執行「設計素材授權清單」制度。由即日起，所有設計項目在最終定稿前，設計師必須列明所有字體、圖片、音樂的來源，並將授權書副本上傳至項目資料夾，由美術指導簽字核實。我們評估過這個做法的可行性，團隊在整理檔案時只需多花幾分鐘歸檔，就能有效把關，將未來的違規風險降到最低。
+
+第三，從長遠來看，儘快為公司統一採購具備企業版商業授權的大型正版圖庫及雲端字體管理系統。這是解決版權問題最徹底、有效的方法。針對設計師為了趕進度而違規的情況，雲端字體系統能讓員工直接從授權清單中選用已購買的字體，從源頭消除他們自行下載不明字體的動機。同時，系統會自動記錄每項素材的使用記錄與到期日，一旦有人嘗試導入未授權素材，系統會立即提醒主管。這種即時的資源管理機制，能有效防止任何人為的版權違規操作。此外，我們也應邀請法律顧問為全體創意團隊舉辦知識產權培訓，提升員工的合規意識。
+
+總括而言，如果能及時替換侵權素材，嚴格執行授權記錄流程以及引入雲端字體管理系統，相信我們的問題就可迎刃而解，並保障公司未來的營運安全。` 
+    },
+    "資訊科技": { 
+        icon: "💻", defaultTheme: "theme-tech",
+        lawHTML: `
+            <div class="law-section"><h3>1. 數據處理與隱私外洩</h3>
+            <p><a href="https://www.elegislation.gov.hk/hk/cap486" target="_blank" class="law-title">《個人資料（私隱）條例》（第 486 章）：</a><br>將真實用戶數據複製到測試環境未經加密脫敏；上線前未做安全測試導致黑客入侵。</p></div>
+            <div class="law-section"><h3>2. 網絡安全與機房清潔衞生</h3>
+            <p><a href="https://www.elegislation.gov.hk/hk/cap509" target="_blank" class="law-title">《職業安全及健康條例》（第 509 章）及機房清潔：</a><br>機房或伺服器環境積聚塵埃影響散熱及防火安全，或未有保持 IT 工作間清潔衞生。</p>
+            <p><a href="https://www.elegislation.gov.hk/hk/cap200" target="_blank" class="law-title">《刑事罪行條例》（第 200 章）第 161 條：</a><br>離職前偷下載源碼、惡意刪除數據或利用權限偷看機密電郵。</p></div>
+            <div class="law-section"><h3>3. 軟件版權與開源協議</h3>
+            <p><a href="https://www.elegislation.gov.hk/hk/cap528" target="_blank" class="law-title">《版權條例》（第 528 章）：</a><br>使用未經商業授權的第三方插件。誤用嚴格傳染性協議（如 GPL）的開源代碼而未依規開源自己產品。</p></div>
+            <div class="law-section"><h3>📋 業內實務守則與指引</h3>
+            <p><a href="https://www.pcpd.org.hk/tc_chi/data_privacy_law/code_of_practices/code.html" target="_blank" class="law-title" style="color:var(--accent);">《資訊及通訊科技的私隱保障指引》（私隱專員公署）</a><br>列明開發 App 時必須遵守的「貫徹私隱的設計（Privacy by Design）」原則。</p>
+            <p><a href="https://www.ogcio.gov.hk/tc/our_work/information_cyber_security/government_infosec/" target="_blank" class="law-title" style="color:var(--accent);">《資訊保安指引》（OGCIO）</a><br>規定密碼長度要求、多重身份驗證（MFA）等系統安全實施標準。</p></div>
+        `, 
+        questions: [
+            "你是如何發現系統或開發環境中的致命漏洞的？(是QA測試發現未脫敏的個資、發現前員工惡意刪除源碼，還是機房積塵嚴重影響散熱與防火？)",
+            "受影響的系統模組、敏感數據的種類，以及潛在受波及的硬體設施為何？",
+            "這可能抵觸了哪些 IT 法例或資安指引？(💡 提示：除了《私隱條例》，是否違反了 OGCIO 的資安指引，或是《職安健條例》對機房清潔的要求？)",
+            "若漏洞被駭客利用或機房發生火警，對百萬用戶隱私、公司股價及服務可用性會有什麼災難性影響？",
+            "導致危機的系統性或人為原因是什麼？(是工程師為方便偷用真實數據、權限控管寬鬆，還是運維部門忽視機房硬體除塵與清潔？)",
+            "應採取什麼即刻的阻斷措施？(例如：立刻徹底刪除測試庫數據、封鎖異常 VPN 存取權限、安排機房緊急無塵清潔？)",
+            "開發與部署流程需作何種嚴格調整？(例如：在 Jira 流程中加入「數據脫敏審批」必填關卡、建立每月機房除塵及保養更表？)",
+            "長遠應引入甚麼自動化資安工具或架構？(例如：整合自動化數據脫敏(Masking)工具、推行零信任網路架構(Zero Trust)？)",
+            "請綜合短中長期建議作結，並強調數據安全與硬體環境衞生是科技企業的基石。"
+        ],
+        phrases: [
+            "近來我們在內部巡查時發現了一個潛在風險，指開發團隊在進行系統測試或運維時可能違反了私隱條例，我想向您匯報一下。",
+            "涉及違規的是即將上線的系統升級版。QA 在進行最終安全測試時發現...",
+            "根據《個人資料（私隱）條例》及資安指引的規定，資料使用者必須採取切實可行的步驟保障個人資料不受未獲准許的查閱。",
+            "若未及時攔截而讓帶有數據漏洞的系統正式上線，公司不但會面臨專員公署處罰，更會嚴重損害百萬會員的信任關係。",
+            "引發這次危機的原因主要有兩方面。首先是工程師私隱保護意識薄弱，其次是團隊忽視了數據與硬體環境的管理規範。",
+            "第一，採取即時措施，清除違規數據與隱患。建議在系統上線前，立刻將測試環境中的真實客戶資料徹底刪除並清空系統日誌。",
+            "第二，完善內部審批與代碼審查流程。我建議立即在開發任務追蹤系統中，加入測試數據來源確認的必填關卡。",
+            "第三，從長遠來看，儘快為公司引入自動化數據脫敏工具，並整合至持續部署的流水線中，從源頭徹底切斷違規的機會。",
+            "總括而言，如果能及時清除真實數據與日誌、將數據審批融入開發系統，以及引入自動化脫敏工具，相信問題就可迎刃而解。"
+        ],
+        demo: `問題匯報示例－私隱數據違規處理問題匯報 
+李總監，近來我們在內部巡查時發現了一個潛在風險，指公司的開發團隊在進行系統測試時可能違反了《個人資料（私隱）條例》（第 486 章），下面我想向您匯報一下。
+
+涉及違規的是即將上線的「會員積分應用程式」升級版。本週一，高級品質保證工程師（QA）在進行上線前的最終安全測試時，發現開發團隊直接使用了未經脫敏（Data Masking）處理的真實客戶資料庫（包含會員姓名、電話及部分信用卡號碼）於測試環境中。收到內部通報後，我馬上進行調查，確認開發團隊確實沒有對這批敏感數據進行加密或匿名化處理。根據《個人資料（私隱）條例》的規定，資料使用者必須採取切實可行的步驟保障個人資料不受未獲准許的查閱或處理。若未及時攔截而讓帶有數據漏洞的系統正式上線，公司不但會面臨私隱專員公署的調查與處罰，更會嚴重損害我們與百萬會員的信任關係，問題亟需解決。
+
+據調查，引發這次私隱危機的原因主要有兩方面。首先，負責該項目的初級後端工程師私隱保護意識薄弱，為了趕進度及方便除錯（Debugging），而直接從正式伺服器匯出真實數據到測試環境。其次，項目團隊忽視了測試數據的管理規範，未有在開發初期及時落實數據脫敏程序。為了解決目前的問題，我有以下三個建議。
+
+第一，採取即時措施，清除違規數據。建議在系統上線限期前，馬上安排資料庫管理員（DBA）立刻將測試環境中的真實客戶資料徹底刪除，並一併清空所有可能記錄了敏感資訊的系統日誌（Logs）與暫存檔，替換為系統生成的虛擬測試數據（Dummy Data）。這樣可確保所有測試環境皆不涉及真實個人資料，將私隱外洩風險在系統正式上線前徹底消除。
+
+第二，完善內部審批與代碼審查（Code Review）流程。我建議立即在開發任務追蹤系統中，加入「測試數據來源確認」的必填關卡。由即日起，工程師在提交代碼前，必須在系統內勾選確認測試數據已脫敏，並由技術主管在審批代碼時一併核實。我們評估過這個做法的可行性，這完全融入了現有的敏捷開發流程，工程師只需多花幾秒鐘點擊確認，就能有效把關，將未來的違規風險降到最低。
+
+第三，從長遠來看，儘快為公司引入自動化數據脫敏工具，並整合至持續整合與持續部署（CI/CD）的自動化流水線中。這是解決私隱數據濫用問題最徹底、有效的方法。針對工程師為了趕進度而違規的情況，自動化工具能在系統從正式資料庫複製數據到測試環境的過程中，自動且即時地將敏感欄位混淆或替換。這樣一來，工程師不僅能節省手動製造測試數據的時間，更能從源頭徹底切斷他們接觸真實數據的機會，消除「貪圖方便」的動機，並防止任何人為的私隱違規操作。此外，我們也應邀請資訊安全專家為全體技術團隊舉辦數據私隱法規培訓，提升員工的合規意識。
+
+總括而言，如果能及時清除真實數據與日誌，將數據審批融入開發系統，以及引入自動化脫敏工具，相信我們的問題就可迎刃而解，並保障公司未來的營運安全。` 
+    },
+    "辦公室工作": { 
+        icon: "📁", defaultTheme: "theme-office",
+        lawHTML: `
+            <div class="law-section"><h3>1. 個人資料與私隱管理</h3>
+            <p><a href="https://www.elegislation.gov.hk/hk/cap486" target="_blank" class="law-title">《個人資料（私隱）條例》（第 486 章）：</a><br>發送群組電郵漏用 BCC；遺留機密文件在影印機；未妥善碎紙直接丟棄機密文件。</p></div>
+            <div class="law-section"><h3>2. 商業操守與利益衝突</h3>
+            <p><a href="https://www.elegislation.gov.hk/hk/cap201" target="_blank" class="law-title">《防止賄賂條例》（第 201 章）：</a><br>未經公司批准私下接受供應商提供的利益（禮物、宴請、回佣），以換取採購優待。</p></div>
+            <div class="law-section"><h3>3. 職業安全與環境清潔衞生</h3>
+            <p><a href="https://www.elegislation.gov.hk/hk/cap509" target="_blank" class="law-title">《職業安全及健康條例》（第 509 章）工作環境衞生：</a><br>走火通道堆滿雜物阻塞逃生；僱主必須確保辦公室（包括洗手間及茶水間）保持清潔，通風系統定期清洗，防止病菌傳播。</p></div>
+            <div class="law-section"><h3>📋 業內實務守則與指引 (Codes of Practice)</h3>
+            <p><a href="https://www.labour.gov.hk/tc/public/pdf/os/D/office.pdf" target="_blank" class="law-title" style="color:var(--accent);">《辦公室環境的職業安全健康指引》（勞工處）</a><br>明確要求定期清潔冷氣隔塵網、茶水間、地毯及辦公室設備，確保室內空氣質素與環境衞生。</p>
+            <p><a href="https://cpas.icac.hk/ZH/Info/TP_Library" target="_blank" class="law-title" style="color:var(--accent);">《防貪實務守則》（廉政公署 ICAC）</a><br>規範採購報價程序（貨比三家）及節日收取供應商禮物的申報上限。</p></div>
+        `, 
+        questions: [
+            "你是如何察覺到日常辦公室運作中的違規風險的？(是發現群發電郵漏用BCC、茶水間與冷氣濾網長期未清洗滋生病菌，還是有員工私下收受回佣？)",
+            "具體發生的場景、涉及的部門人員及具體物件事項（如機密薪酬文件、骯髒的通風系統、昂貴禮物）是什麼？",
+            "這些行為可能觸碰了哪些辦公室法規紅線？(💡 提示：請多角度思考，是否違反了《防賄條例》、或勞工處《辦公室環境指引》中的清潔與通風要求？)",
+            "這些看似微小的失誤，會為公司引來什麼樣的廉政調查、傳染病群組爆發或嚴重的公關危機？",
+            "造成問題的主因是什麼？(是前線員工缺乏資安意識、貪圖一時方便、部門間缺乏儲物規劃，還是對利益申報指引不熟悉？)",
+            "有什麼即時的糾正與補救行動？(例如：立刻攔截外發電郵、即時安排專業公司進行冷氣與茶水間深層清潔消毒、要求退還不當利益？)",
+            "如何透過優化行政流程堵塞漏洞？(例如：強制實施辦公室衞生巡查與清潔外判更表、重申嚴格的利益申報及碎紙銷毀程序？)",
+            "引入什麼科技設備或智能化系統能長遠解決問題？(例如：設置感應式語音警報智能儲物櫃、部署企業級防洩密(DLP)系統、智能空氣淨化裝置？)",
+            "請簡潔總結解決方案，並強調培養全體員工「處處留心」的辦公室合規及衞生意識的重要性。"
+        ],
+        phrases: [
+            "近來我們在內部巡查時發現了一個潛在風險，指公司的行政及倉儲區域在日常運作時可能違反法規，我想向您匯報一下。",
+            "涉及違規的是辦公室後勤走廊及緊急走火通道。在進行每週例行巡查時，發現走火通道堆放了大量物資紙箱...",
+            "根據《職業安全及健康條例》及勞工處的指引，僱主必須確保工作地點的逃生途徑安全及環境清潔。",
+            "若未及時處理而讓辦公室在存有安全隱患的情況下繼續運作，公司不但會面臨消防處的檢控，更會嚴重威脅同事生命安全。",
+            "引發這次危機的原因主要有兩方面。首先是前線員工職安健意識薄弱，其次是公司缺乏明確的臨時儲物與清潔規劃。",
+            "第一，採取即時措施，清除潛在危險與清理環境。建議在今天的辦公限期前，馬上將走火通道上的雜物清空並轉移到儲物室。",
+            "第二，完善內部巡查與記錄流程。我建議立即嚴格執行辦公室每日安全及衞生巡查紀錄表，並拍攝照片歸檔。",
+            "第三，從長遠來看，儘快統一採購具備感應式警報功能的智能儲物櫃系統，從源頭消除員工貪方便的動機。",
+            "總括而言，如果能及時清理違規雜物、嚴格執行安全記錄流程以及引入智能儲物監控系統，相信問題就可迎刃而解。"
+        ],
+        demo: `問題匯報示例－辦公室職安健違規問題匯報 
+張主任，近來我們在內部巡查時發現了一個潛在風險，指公司的行政及倉儲區域在日常運作時可能違反了《職業安全及健康條例》（第 509 章），下面我想向您匯報一下。
+
+涉及違規的是辦公室後勤走廊及緊急走火通道。本週一，行政主任在進行每週例行巡查時，發現走火通道堆放了大量準備派發的活動物資紙箱，嚴重阻塞了逃生路線，部分影印機房外露的電線也造成了絆倒危機。收到內部通報後，我馬上進行調查，確認相關部門確實沒有按安全指引妥善存放物資。根據《職業安全及健康條例》的規定，僱主必須確保工作地點的逃生途徑安全及暢通無阻。若未及時處理而讓辦公室在存有安全隱患的情況下繼續運作，公司不但會面臨勞工處或消防處的檢控與巨額罰款，更會嚴重威脅同事的生命安全，問題亟需解決。
+
+據調查，引發這次工安危機的原因主要有兩方面。首先，負責接收物資的前線行政員工職安健意識薄弱，為了趕進度及方便派發，而直接將貨物暫存在離門口最近的走廊。其次，公司缺乏明確的臨時儲物規劃，日常也未有嚴格執行安全巡查。為了解決目前的問題，我有以下三個建議。
+
+第一，採取即時措施，清除潛在危險。建議在今天的辦公限期前，馬上安排行政團隊立刻將走火通道上的雜物及電線清空，並將物資轉移到已規劃的儲物室或閒置會議室內。這樣可確保所有通道立即恢復暢通，將工傷及消防風險在下一個工作日前徹底消除。
+
+第二，完善內部巡查與記錄流程。我建議立即嚴格執行「辦公室每日安全巡查紀錄表」。由即日起，每天下班前，行政部必須確實巡視所有走廊及出口，並拍攝照片歸檔，由行政經理簽字核實。我們評估過這個做法的可行性，行政人員每天只需多花幾分鐘巡視，就能有效把關，將未來的違規風險降到最低。
+
+第三，從長遠來看，儘快為公司統一採購具備感應式警報功能的智能儲物櫃系統，並重新規劃物資流轉流程。這是解決雜物堆積問題最徹底、有效的方法。針對員工為了趕進度及方便而隨處堆放的情況，智能儲物櫃系統能透過門禁連結，一旦偵測到物資在走廊等非儲存區停留超過預設時間，或擋住消防感應器，系統會立即現場發出語音提醒，並自動發送異常通知給行政主管。這種自動化的監控機制，能從源頭消除員工「圖方便」的動機。同時，系統會自動記錄物資進出時間，優化倉儲周轉效率。此外，我們也應邀請職安健顧問為全體員工舉辦工作場所安全講座，提升員工的合規意識。
+
+總括而言，如果能及時清理違規雜物，嚴格執行安全記錄流程以及引入智能儲物監控系統，相信我們的問題就可迎刃而解，並保障公司未來的營運安全。` 
+    }
+};
+
+/* -------------------------------------------------------------------------
+   全局狀態管理 (文字 + 圖片)
+   ------------------------------------------------------------------------- */
+let currentSlide = 1;
+let selectedIndustry = "";
+let pptData = {}; 
+
+function init() {
+    const list = document.getElementById('industry-list');
+    
+    // 渲染一般行業 (除了自由創作)
+    Object.keys(industries).forEach(name => {
+        if(name !== "自由創作") {
+            list.innerHTML += `
+                <div class="industry-item" onclick="startExercise('${name}')">
+                    <div style="font-size: 45px; margin-bottom: 15px;">${industries[name].icon}</div>
+                    <h3>${name}</h3>
+                </div>
+            `;
+        }
+    });
+    
+    // 將「自由創作」獨立附加在最後，橫跨全欄位
+    list.innerHTML += `
+        <div class="industry-item special-item" onclick="startExercise('自由創作')">
+            <div style="font-size: 55px; margin-bottom: 15px;">✨</div>
+            <h3>自由創作</h3>
+            <p style="color: #d35400; font-size: 15px; margin-top: 10px; font-weight: bold;">不限行業，自訂主題自由發揮</p>
+        </div>
+    `;
+    
+    // 初始化 V1-V14 藝廊
+    renderGallery('demo-gallery');
+    renderGallery('exercise-gallery');
+}
+
+function renderGallery(containerId) {
+    const container = document.getElementById(containerId);
+    let html = '';
+    for(let i=1; i<=14; i++) {
+        html += `<img src="V${i}.jpg" class="zoomable" onclick="openImageModal(this.src)" title="點擊放大參考">`;
+    }
+    container.innerHTML = html;
+}
+
+function switchView(id) {
+    document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active-view'));
+    document.getElementById(id).classList.add('active-view');
+    window.speechSynthesis.cancel();
+    window.scrollTo(0, 0);
+}
+
+/* === 示範區邏輯 === */
+function openDemo() {
+    const container = document.getElementById('demo-steps-container');
+    container.innerHTML = ''; 
+
+    demoStepsData.forEach((step, index) => {
+        const stepHtml = `
+            <div class="step-container">
+                <div class="step-header">${step.title}</div>
+                <div class="tab-buttons">
+                    <button class="tab-btn active" onclick="switchTab(this, 'q', ${index})">🤔 思考問題</button>
+                    <button class="tab-btn" onclick="switchTab(this, 'i', ${index})">💡 核心要點</button>
+                    <button class="tab-btn" onclick="switchTab(this, 'c', ${index})">📝 組織內容 (示範講稿)</button>
+                </div>
+                <div class="tab-content" id="tab-content-${index}">
+                    <div style="color: #c0392b; font-weight: bold; font-size: 18px;">${step.q}</div>
+                </div>
+            </div>
+        `;
+        container.innerHTML += stepHtml;
+    });
+    switchView('demo-view');
+}
+
+function switchTab(btn, type, index) {
+    const buttons = btn.parentElement.querySelectorAll('.tab-btn');
+    buttons.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    const contentDiv = document.getElementById(`tab-content-${index}`);
+    if (type === 'q') {
+        contentDiv.innerHTML = `<div style="color: #c0392b; font-weight: bold; font-size: 18px;">${demoStepsData[index].q}</div>`;
+    } else if (type === 'i') {
+        const ideas = demoStepsData[index].i.split('；').map(item => `<li>${item}</li>`).join('');
+        contentDiv.innerHTML = `<ul style="font-size: 16px; line-height: 1.6; margin:0; padding-left:20px; color:#2980b9; font-weight:bold;">${ideas}</ul>`;
+    } else if (type === 'c') {
+        const textToSpeak = demoSpeechData[index];
+        contentDiv.innerHTML = `
+            <div style="color: #2c3e50; font-size: 17px; margin-bottom: 15px;">${textToSpeak}</div>
+            <button class="btn-tts" onclick="speakMandarin('${textToSpeak}')">🔊 普通話發音</button>
+        `;
+    }
+}
+
+function openImageModal(src) {
+    document.getElementById('enlargedImg').src = src;
+    document.getElementById('image-modal-box').style.display = 'flex';
+}
+function closeImageModal() {
+    document.getElementById('image-modal-box').style.display = 'none';
+}
+
+/* === 實作區邏輯 === */
+function startExercise(name) {
+    selectedIndustry = name;
+    document.getElementById('exercise-title').innerText = `${industries[name].icon} ${name}：工作匯報實作`;
+    
+    // 設定預設風格
+    document.getElementById('theme-style').value = industries[name].defaultTheme;
+
+    // 載入本地數據
+    const savedRaw = localStorage.getItem(`ppt_master_data_${selectedIndustry}`);
+    if(savedRaw) {
+        pptData[selectedIndustry] = JSON.parse(savedRaw);
+    } else {
+        pptData[selectedIndustry] = {};
+        for(let i=1; i<=9; i++) pptData[selectedIndustry][i] = { text: "", img: "" };
+    }
+
+    const inputs = document.getElementById('steps-inputs');
+    inputs.innerHTML = '';
+    slideStructure.forEach((s, index) => {
+        const slideD = pptData[selectedIndustry][s.id] || {text:"", img:""};
+        const customQuestion = industries[name].questions[index]; 
+        const commonPhrase = industries[name].phrases[index];
+        
+        // 在步驟三加入參考條例按鈕
+        let extraBtn = "";
+        if (s.id === 3) {
+            extraBtn = `<button onclick="showLaws()" class="btn-ref-small" title="查閱相關條例及守則">📄 參考法例與守則</button>`;
+        }
+        
+        inputs.innerHTML += `
+            <div class="exercise-step" id="step-box-${s.id}">
+                <div style="display:flex; align-items:center; justify-content: space-between; margin-bottom: 15px;">
+                    <h4 style="margin:0; color:var(--primary); font-size: 19px;">${s.title}</h4>
+                    ${extraBtn}
+                </div>
+                <p class="hint-text" style="font-size:15px; color:#c0392b; font-weight:bold; margin-bottom:12px; background:#fdf2e9; padding:12px; border-radius:6px; border:1px dashed #e67e22; line-height: 1.6;">
+                    🤔 多角度思考：<br><span style="color:#e67e22; font-weight:normal;">${customQuestion}</span>
+                </p>
+                <div class="phrase-box no-print">
+                    <span style="flex:1; margin-right:15px;"><strong>🗣️ 常用句式：</strong><br>${commonPhrase}</span>
+                    <button onclick="speakMandarin('${commonPhrase}')" class="btn-tts-small" title="播放普通話語音">🔊 普通話發音</button>
+                </div>
+                <textarea id="input-s${s.id}" onfocus="jumpToSlide(${s.id})" oninput="syncText(${s.id})" placeholder="👉 提示：請以【點列式】(Bullet points) 呈現資料，保持簡報清晰易讀。&#10;• 重點一...&#10;• 重點二...">${slideD.text}</textarea>
+                
+                <div class="upload-section no-print">
+                    <label class="img-upload-label">
+                        🖼️ 上載簡報圖片 (可選)
+                        <input type="file" accept="image/*" style="display:none;" onchange="handleImageUpload(event, ${s.id})">
+                    </label>
+                    <button class="remove-img-btn" id="remove-img-btn-${s.id}" onclick="removeImage(${s.id})" style="display: ${slideD.img ? 'inline-block' : 'none'};">🗑️ 移除圖片</button>
+                </div>
+            </div>
+        `;
+    });
+    
+    switchView('exercise-view');
+    currentSlide = 1;
+    updateUI();
+}
+
+function handleImageUpload(event, id) {
+    const file = event.target.files[0];
+    if (!file) return;
+    
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        pptData[selectedIndustry][id].img = e.target.result;
+        document.getElementById(`remove-img-btn-${id}`).style.display = 'inline-block';
+        if (currentSlide === id) updateUI();
+    };
+    reader.readAsDataURL(file);
+}
+
+function removeImage(id) {
+    pptData[selectedIndustry][id].img = "";
+    document.getElementById(`remove-img-btn-${id}`).style.display = 'none';
+    if (currentSlide === id) updateUI();
+}
+
+function syncText(id) {
+    pptData[selectedIndustry][id].text = document.getElementById(`input-s${id}`).value;
+    if(id === currentSlide) {
+        document.getElementById('ppt-content').innerText = pptData[selectedIndustry][id].text;
+    }
+}
+
+function updateUI() {
+    const color = document.getElementById('theme-color').value;
+    const style = document.getElementById('theme-style').value;
+    document.documentElement.style.setProperty('--ppt-theme', color);
+    
+    const preview = document.getElementById('ppt-preview');
+    preview.className = `slide-container ${style}`;
+    
+    const step = slideStructure[currentSlide - 1];
+    const sData = pptData[selectedIndustry][currentSlide] || {text:"", img:""};
+    
+    document.getElementById('ppt-title').innerText = step.slide;
+    document.getElementById('ppt-content').innerText = sData.text;
+    
+    const imgEl = document.getElementById('ppt-img-preview');
+    if(sData.img) {
+        imgEl.src = sData.img;
+        imgEl.style.display = 'block';
+    } else {
+        imgEl.src = "";
+        imgEl.style.display = 'none';
+    }
+    
+    document.getElementById('slide-index').innerText = `${currentSlide} / 9`;
+    
+    // 更新右側的「多角度思考」提示
+    const hintBox = document.getElementById('hint-text');
+    if (hintBox && industries[selectedIndustry] && industries[selectedIndustry].questions[currentSlide - 1]) {
+        hintBox.innerHTML = industries[selectedIndustry].questions[currentSlide - 1];
+    }
+}
+
+function jumpToSlide(id) {
+    currentSlide = id;
+    updateUI();
+}
+
+function changeSlide(dir) {
+    let next = currentSlide + dir;
+    if(next >= 1 && next <= 9) {
+        currentSlide = next;
+        updateUI();
+        document.getElementById(`step-box-${next}`).scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+}
+
+function speakCurrentInput() {
+    const text = document.getElementById(`input-s${currentSlide}`).value;
+    if(text.trim() === "") {
+        alert("當前頁面沒有輸入內容可以聆聽哦！");
+        return;
+    }
+    speakMandarin(text);
+}
+
+function showLaws() {
+    document.getElementById('modal-title').innerText = `📂 ${selectedIndustry} - 相關法例與守則`;
+    document.getElementById('modal-body').innerHTML = industries[selectedIndustry].lawHTML;
+    document.getElementById('modal-box').style.display = 'flex';
+}
+
+function askUnlock() {
+    const pw = prompt("請輸入教師解鎖密碼 (IVELC)：");
+    if(pw === "IVELC") {
+        document.getElementById('modal-title').innerText = `🎓 ${selectedIndustry} - 教師口頭報告示範`;
+        const formattedDemo = industries[selectedIndustry].demo.replace(/\n/g, '<br><br>');
+        document.getElementById('modal-body').innerHTML = `<div style="white-space: normal;">${formattedDemo}</div>`;
+        document.getElementById('modal-box').style.display = 'flex';
+    } else if(pw !== null) {
+        alert("密碼不正確，請向老師查詢解鎖密碼！");
+    }
+}
+
+function generateFinal() {
+    const gallery = document.getElementById('final-gallery');
+    gallery.innerHTML = '';
+    const style = document.getElementById('theme-style').value;
+
+    slideStructure.forEach(s => {
+        const sData = pptData[selectedIndustry][s.id] || {text:"", img:""};
+        let imgHtml = sData.img ? `<img src="${sData.img}" class="slide-uploaded-img" style="display:block;">` : '';
+        
+        gallery.innerHTML += `
+            <div class="slide-container ${style}" style="box-shadow: 0 5px 15px rgba(0,0,0,0.1); border-radius: 8px;">
+                <div class="slide-title">${s.slide}</div>
+                <div class="slide-body-wrapper">
+                    <div class="slide-content">${sData.text || ""}</div>
+                    ${imgHtml}
+                </div>
+            </div>
+        `;
+    });
+    saveLocal(false);
+    switchView('final-view');
+}
+
+function saveLocal(showAlert = true) {
+    localStorage.setItem(`ppt_master_data_${selectedIndustry}`, JSON.stringify(pptData[selectedIndustry]));
+    if(showAlert) alert(`已成功保留 ${selectedIndustry} 的進度與圖片！`);
+}
+
+// 啟動初始化
+init();
+</script>
+</body>
+</html>
