@@ -11,7 +11,7 @@
             --accent: #FF512F; /* 活力亮橘紅 */
             --highlight: #00C9FF; /* 明亮青色 */
             --text-dark: #2c3e50;
-            --ppt-theme: #2c3e50; /* 預設簡報主色 */
+            --ppt-theme: #4A00E0; 
         }
         body { 
             font-family: 'Segoe UI', 'Microsoft JhengHei', sans-serif; 
@@ -178,19 +178,21 @@
         .btn-primary:hover { box-shadow: 0 6px 18px rgba(38,208,206,0.4); transform: translateY(-2px); }
         .btn-accent { background: linear-gradient(135deg, #FF512F, #DD2476); color: white; box-shadow: 0 4px 12px rgba(255,81,47,0.3); }
         .btn-lock { background: linear-gradient(135deg, #8E2DE2, #4A00E0); color: white; box-shadow: 0 4px 12px rgba(142,45,226,0.3);}
+        .btn-lock:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(142,45,226,0.4);}
         .btn-ref-small { background: linear-gradient(135deg, #f1c40f, #f39c12); color: white; padding: 8px 15px; border-radius: 6px; font-size: 13px; display: inline-flex; align-items: center; gap: 5px; margin-left: auto; }
 
         /* 圖片視覺藝廊 */
         .v-gallery-container { display: flex; overflow-x: auto; gap: 15px; padding: 15px 5px; scrollbar-width: thin; scrollbar-color: #f39c12 transparent; margin-top: 10px; background: transparent; border-radius: 8px;}
         .v-gallery-container::-webkit-scrollbar { height: 8px; }
         .v-gallery-container::-webkit-scrollbar-thumb { background: #f39c12; border-radius: 4px; }
-        .v-gallery-container img { height: 160px; width: auto; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); flex-shrink: 0; cursor: zoom-in; transition: 0.3s;}
+        .v-gallery-container img { height: 180px; width: auto; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); flex-shrink: 0; cursor: zoom-in; transition: 0.3s;}
         .v-gallery-container img:hover { transform: scale(1.05); border-color: var(--highlight);}
         
         /* 模態框 (文字與圖片) */
         .modal { display: none; position: fixed; z-index: 3000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); justify-content: center; align-items: center; backdrop-filter: blur(5px); }
         .modal-content { background: white; padding: 40px; border-radius: 16px; width: 85%; max-width: 850px; max-height: 85vh; overflow-y: auto; position: relative; box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
         #enlargedImg { max-width: 95%; max-height: 95vh; object-fit: contain; border-radius: 8px; animation: zoomIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes zoomIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
         /* 法規條文樣式 */
         .law-section { margin-bottom: 25px; border-bottom: 1px solid #eee; padding-bottom: 20px; }
@@ -200,11 +202,11 @@
         .law-title { font-weight: bold; text-decoration: none; border-bottom: 1px solid var(--highlight); padding-bottom: 2px; color: var(--highlight); transition: color 0.2s;}
         .law-title:hover { color: var(--accent) !important; border-bottom-color: var(--accent); background: rgba(38,208,206,0.1); }
 
-        /* ================= 九大時尚風格主題 (根據 --ppt-theme 動態變色) ================= */
+        /* ================= 九大時尚風格主題 ================= */
         
         /* 1. 商務專業 */
         .theme-office { background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%); border-left: 12px solid var(--ppt-theme); }
-        .theme-office .slide-title { color: var(--ppt-theme); border-bottom: 2px solid var(--ppt-theme); opacity: 0.9;}
+        .theme-office .slide-title { color: var(--ppt-theme); border-bottom: 2px solid rgba(26,41,128,0.2); }
 
         /* 2. 科技黑客 */
         .theme-tech { background: #1a1a2e; color: #ecf0f1; box-shadow: inset 0 0 0 2px var(--ppt-theme), 0 10px 25px rgba(0,0,0,0.3); }
@@ -360,10 +362,10 @@
                         <img id="ppt-img-preview" class="slide-uploaded-img" src="" alt="自訂圖片預覽">
                     </div>
                 </div>
-                <div style="margin-top: 20px; font-weight: bold; display: flex; align-items: center; justify-content: center; width: 100%;">
-                    <button onclick="changeSlide(-1)" style="background: #e0e6ed; color: #333; padding: 8px 15px; border:none; border-radius:6px; cursor:pointer;">◀ 上一步</button>
-                    <span id="slide-index" style="margin: 0 20px; font-size: 16px; color: var(--primary); background: #fff; padding: 4px 15px; border-radius: 20px; border: 1px solid #eee;">1 / 9</span>
-                    <button onclick="changeSlide(1)" class="btn-primary" style="padding: 8px 15px;">下一步 ▶</button>
+                <div style="margin-top: 25px; font-weight: bold; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; width: 100%;">
+                    <button onclick="changeSlide(-1)" style="background: #e0e6ed; color: #333; box-shadow: none; border:none; padding:8px 15px; border-radius:6px; cursor:pointer;">◀ 上一步</button>
+                    <span id="slide-index" style="margin: 0 25px; font-size: 18px; color: var(--primary); background: #fff; padding: 5px 15px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">1 / 9</span>
+                    <button onclick="changeSlide(1)" class="btn-primary" style="padding:8px 15px;">下一步 ▶</button>
                 </div>
                 
                 <div class="reference-area no-print">
@@ -376,7 +378,7 @@
                     </div>
                     
                     <hr style="border: 0; border-top: 1px dashed #f39c12; margin: 25px 0;">
-                    <h3 style="color:#2980b9; font-size: 17px; margin-bottom: 10px; margin-top: 0;">🖼️ 示範 PPT 視覺參考 <span style="font-size:13px;color:#777; font-weight:normal;">(滑動瀏覽)</span></h3>
+                    <h3 style="color:#2980b9; font-size: 17px; margin-bottom: 10px; margin-top: 0; display: flex; align-items: center; gap: 8px;">🖼️ 示範 PPT 視覺參考 <span style="font-size:13px;color:#777; font-weight:normal;">(左右滑動瀏覽，點擊可放大)</span></h3>
                     <div id="exercise-gallery" class="v-gallery-container"></div>
                 </div>
             </div>
@@ -1075,8 +1077,9 @@ function showLaws() {
 }
 
 function askUnlock() {
-    const pw = prompt("請輸入教師解鎖密碼 (IVELC)：");
-    if(pw === "IVELC") {
+    const pw = prompt("請輸入教師解鎖密碼：");
+    // 將明文 IVELC 轉換為 ASCII 碼，防止學生在原始碼直接看到密碼
+    if(pw === String.fromCharCode(73, 86, 69, 76, 67)) {
         document.getElementById('modal-title').innerText = `🎓 ${selectedIndustry} - 教師口頭報告示範`;
         const formattedDemo = industries[selectedIndustry].demo.replace(/\n/g, '<br><br>');
         document.getElementById('modal-body').innerHTML = `<div style="white-space: normal;">${formattedDemo}</div>`;
